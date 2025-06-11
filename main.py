@@ -1,4 +1,4 @@
- import json
+import json
 from proxy import ProxyManager
 from agent import Agent
 import asyncio
