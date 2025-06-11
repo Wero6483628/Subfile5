@@ -1,0 +1,56 @@
+{
+  "reddit_accounts": [
+    {
+      "username": "reddit_user1",
+      "password": "password1",
+      "token": ""
+    },
+    {
+      "username": "reddit_user2",
+      "password": "password2",
+      "token": ""
+    },
+    {
+      "username": "reddit_user3",
+      "password": "password3",
+      "token": ""
+    },
+    {
+      "username": "reddit_user4",
+      "password": "password4",
+      "token": ""
+    },
+    {
+      "username": "reddit_user5",
+      "password": "password5",
+      "token": ""
+    }
+  ],
+  "pinterest_accounts": [
+    {
+      "username": "pinterest_user1",
+      "password": "password1",
+      "token": ""
+    },
+    {
+      "username": "pinterest_user2",
+      "password": "password2",
+      "token": ""
+    },
+    {
+      "username": "pinterest_user3",
+      "password": "password3",
+      "token": ""
+    },
+    {
+      "username": "pinterest_user4",
+      "password": "password4",
+      "token": ""
+    },
+    {
+      "username": "pinterest_user5",
+      "password": "password5",
+      "token": ""
+    }
+  ]
+}
