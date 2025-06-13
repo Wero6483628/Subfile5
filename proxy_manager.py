@@ -47,7 +47,7 @@ PROXY_SOURCES = [
 ]
 
 # ✅ اختبار البروكسي
-def is_proxy_working(proxy, test_url="https://ammuse1234.blogspot.com", timeout=7):
+def is_proxy_working(proxy, test_url="https://ammuse12345.blogspot.com", timeout=7):
     try:
         response = requests.get(test_url, proxies={"http": proxy, "https": proxy}, timeout=timeout)
         return response.status_code == 200
