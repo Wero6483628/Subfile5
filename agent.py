@@ -3,8 +3,6 @@ import time
 import requests
 from get_articles import get_articles
 from message_generator import generate_message
-from reddit_poster import post_to_reddit
-from pinterest_poster import post_to_pinterest
 from bs4 import BeautifulSoup
 
 class Agent:
