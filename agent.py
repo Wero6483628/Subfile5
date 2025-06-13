@@ -1,32 +1,66 @@
-import requests
-import time
 import random
+import time
+import requests
+from get_articles import get_articles
 from message_generator import generate_message
+from reddit_poster import post_to_reddit
+from pinterest_poster import post_to_pinterest
+from bs4 import BeautifulSoup
 
-def simulate_article_visit(url, proxy=None):
-    try:
-        response = requests.get(url, proxies={"http": proxy, "https": proxy} if proxy else None, timeout=10)
-        if response.status_code == 200:
-            print(f"[✓] Visited: {url}")
-            time.sleep(random.uniform(2, 4))
-            return True
-    except Exception as e:
-        print(f"[×] Visit failed: {e}")
-    return False
+class Agent:
+    def __init__(self, proxy):
+        self.proxy = {
+            "http": f"http://{proxy}",
+            "https": f"http://{proxy}",
+        }
 
-def post_to_reddit(article_url, token, username):
-    print(f"[Reddit] {username} posting: {article_url}")
-    return True  # mock success
+    def simulate_human_behavior(self, url):
+        print(f"👀 Visiting: {url}")
+        try:
+            response = requests.get(url, proxies=self.proxy, timeout=10)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Scroll-like delay
+            scroll_time = random.uniform(5, 12)
+            print(f"🕒 Simulating read time: {int(scroll_time)}s")
+            time.sleep(scroll_time)
 
-def post_to_pinterest(article_url, token, username):
-    print(f"[Pinterest] {username} pinning: {article_url}")
-    return True  # mock success
+            # Randomly interact with text or images (simulate)
+            print("🧠 Simulating user interaction...")
+            time.sleep(random.uniform(1, 3))
 
-def run_agent(agent_id, proxy, articles, reddit_account, pinterest_account):
-    for url in articles:
-        simulate_article_visit(url, proxy)
-        if reddit_account:
-            post_to_reddit(url, reddit_account['reddit_token'], reddit_account['reddit_username'])
-        if pinterest_account:
-            post_to_pinterest(url, pinterest_account['pinterest_token'], pinterest_account['pinterest_username'])
-        time.sleep(random.uniform(3, 7))
+        except Exception as e:
+            print(f"❌ Failed to simulate behavior on {url}: {e}")
+
+    def run(self):
+        articles = get_articles(self.proxy)
+        if not articles:
+            print("⚠️ No articles found.")
+            return
+
+        selected_articles = random.sample(articles, min(len(articles), random.randint(3, 5)))
+
+        for article_url in selected_articles:
+            try:
+                self.simulate_human_behavior(article_url)
+
+                # Generate unique message
+                message = generate_message(article_url)
+                print(f"📝 Message: {message}")
+
+                # Post to Reddit
+                print("📤 Posting to Reddit...")
+                post_to_reddit(message, article_url)
+
+                # Short delay before Pinterest
+                time.sleep(random.randint(3, 6))
+
+                # Post to Pinterest
+                print("📌 Posting to Pinterest...")
+                post_to_pinterest(message, article_url)
+
+                # Wait between posts
+                time.sleep(random.randint(8, 15))
+
+            except Exception as e:
+                print(f"❌ Error handling article {article_url}: {e}")
