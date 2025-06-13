@@ -1,8 +1,0 @@
-requests
-praw
-pinterest-api
-python-dotenv
-httpx
-beautifulsoup4
-lxml
-aiohttp
