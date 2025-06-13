@@ -38,7 +38,7 @@ def main():
     print(f"[ℹ️] Agent count for this run: {agent_count}")
 
     # جلب البروكسيات الأوروبية الصالحة
-    pm = ProxyManager(required_proxies=agent_count)
+    pm = ProxyManager(required_count=agent_count)
     pm.fetch_and_test_proxies()
     proxies = pm.get_valid_proxies()
     print(f"[✅] Got {len(proxies)} working proxies.")
