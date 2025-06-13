@@ -1,6 +1,7 @@
 import random
 import time
 import requests
+from get_articles import get_articles
 from bs4 import BeautifulSoup
 
 class Agent:
