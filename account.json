@@ -1,0 +1,14 @@
+{
+  "reddit": [
+    {
+      "reddit_token": "your_reddit_token",
+      "reddit_username": "your_reddit_username"
+    }
+  ],
+  "pinterest": [
+    {
+      "pinterest_token": "your_pinterest_token",
+      "pinterest_username": "your_pinterest_username"
+    }
+  ]
+}
