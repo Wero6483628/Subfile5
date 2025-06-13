@@ -23,7 +23,7 @@ def get_articles(proxy):
         articles = []
         for link in links:
             href = link.get('href')
-            if href and href.startswith("https://ammuse1234.blogspot.com/") and "/search" not in href:
+            if href and href.startswith("https://ammuse12345.blogspot.com/") and "/search" not in href:
                 articles.append(href)
 
         # إزالة التكرار
