@@ -1,8 +1,6 @@
 import random
 import time
 import requests
-from get_articles import get_articles
-from message_generator import generate_message
 from bs4 import BeautifulSoup
 
 class Agent:
@@ -30,12 +28,12 @@ class Agent:
         except Exception as e:
             print(f"❌ Failed to simulate behavior on {url}: {e}")
 
-      def run(self):
-    proxy_str = self.proxy["http"].replace("http://", "")
-    articles = get_articles(proxy_str)
-    if not articles:
-        print("⚠️ No articles found.")
-        return
+    def run(self):
+        proxy_str = self.proxy["http"].replace("http://", "")
+        articles = get_articles(proxy_str)
+        if not articles:
+            print("⚠️ No articles found.")
+            return
 
         selected_articles = random.sample(articles, min(len(articles), random.randint(3, 5)))
 
