@@ -1,65 +1,32 @@
 import random
-import json
-import os
-from proxy_manager import ProxyManager
-from agent import run_agent
-from concurrent.futures import ThreadPoolExecutor
+import time
+from proxy_manager import get_required_proxies
+from agent import Agent
 
-def load_articles():
+# ✅ تحديد عدد الـ Agents عشوائيًا بين 10 و15
+agent_count = random.randint(10, 15)
+print(f"🔢 Running {agent_count} agents...")
+
+# ✅ جلب بروكسيات أوروبية مختلفة وصالحة
+proxies = get_required_proxies(required_count=agent_count)
+if len(proxies) < agent_count:
+    print("⚠️ Not enough proxies. Exiting.")
+    exit()
+
+# ✅ إنشاء وتشغيل كل Agent بتأخير عشوائي بين كل واحد
+for i in range(agent_count):
+    proxy = proxies[i]
+    print(f"\n🚀 Starting Agent #{i+1} with proxy: {proxy}")
+    
     try:
-        with open("articles.json", "r") as f:
-            return json.load(f)
-    except:
-        print("[⚠️] Failed to load articles.json")
-        return []
+        agent = Agent(proxy)
+        agent.run()
+    except Exception as e:
+        print(f"❌ Error in Agent #{i+1}: {e}")
+    
+    # ✅ تأخير عشوائي بين 1-3 دقائق لتجنب الحظر أو كشف الأنماط
+    sleep_time = random.randint(60, 180)
+    print(f"⏳ Sleeping {sleep_time} seconds before next agent...")
+    time.sleep(sleep_time)
 
-def generate_agent_config(proxy_list, articles, agent_count):
-    agents = []
-    articles_per_agent = max(1, len(articles) // agent_count)
-    random.shuffle(articles)
-
-    for i in range(agent_count):
-        agent_articles = articles[i * articles_per_agent:(i + 1) * articles_per_agent]
-        agent = {
-            "proxy": proxy_list[i] if i < len(proxy_list) else None,
-            "delay": random.randint(5, 12),
-            "articles_to_visit": agent_articles,
-            "platforms": ["reddit", "pinterest"]
-        }
-        agents.append(agent)
-
-    return agents
-
-def main():
-    print("[⚙️] Starting AI Agent system...")
-
-    # عدد الـ Agents المطلوب (عشوائي بين 100 و 500)
-    agent_count = random.randint(100, 500)
-    print(f"[ℹ️] Agent count for this run: {agent_count}")
-
-    # جلب البروكسيات الأوروبية الصالحة
-    pm = ProxyManager(required_count=agent_count)
-    pm.fetch_and_test_proxies()
-    proxies = pm.get_valid_proxies()
-    print(f"[✅] Got {len(proxies)} working proxies.")
-
-    # تحميل المقالات من ملف خارجي
-    articles = load_articles()
-    if not articles:
-        print("[❌] No articles found. Exiting.")
-        return
-
-    # توليد إعدادات الـ Agents
-    agents = generate_agent_config(proxies, articles, agent_count)
-
-    # تحميل الحسابات
-    with open("account.json", "r") as f:
-        accounts = json.load(f)
-
-    # تشغيل كل Agent
-    with ThreadPoolExecutor(max_workers=30) as executor:
-        for agent in agents:
-            executor.submit(run_agent, agent, accounts)
-
-if __name__ == "__main__":
-    main()
+print("✅ All agents completed.")
