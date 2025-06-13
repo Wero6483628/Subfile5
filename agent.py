@@ -31,7 +31,8 @@ class Agent:
             print(f"❌ Failed to simulate behavior on {url}: {e}")
 
     def run(self):
-        articles = get_articles(self.proxy)
+      proxy_str = self.proxy["http"].replace("http://", "")
+       articles = get_articles(proxy_str)
         if not articles:
             print("⚠️ No articles found.")
             return
