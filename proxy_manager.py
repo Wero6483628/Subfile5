@@ -22,25 +22,36 @@ PROXY_SOURCES = [
 
 BLOG_URL = "https://ammuse12345.blogspot.com"
 
-# ✅ اختبار البروكسي مع التحقق من وجود مقالات فعلية
+# ✅ اختبار البروكسي مع التحقق من وجود مقالات فعلية + تجربة فتح مقالة مباشرة
 def is_proxy_working(proxy, timeout=8):
     proxies = {
         "http": f"http://{proxy}",
         "https": f"http://{proxy}",
     }
+
     try:
+        # الخطوة 1: فتح الصفحة الرئيسية
         response = requests.get(BLOG_URL, proxies=proxies, timeout=timeout)
         if response.status_code != 200:
             return False
 
         soup = BeautifulSoup(response.text, 'html.parser')
         links = soup.find_all('a')
+
+        # الخطوة 2: استخراج روابط المقالات
+        article_links = []
         for link in links:
             href = link.get('href')
             if href and href.startswith(BLOG_URL) and href.endswith(".html") and "/search" not in href:
-                return True  # ✅ بروكسي يعمل والمقالات متاحة
+                article_links.append(href)
 
-        return False  # ❌ لا توجد مقالات صالحة رغم فتح الصفحة
+        if not article_links:
+            return False  # لا توجد مقالات صالحة رغم فتح الصفحة
+
+        # الخطوة 3: تجربة فتح أول مقالة للتأكد النهائي
+        test_article_url = article_links[0]
+        article_response = requests.get(test_article_url, proxies=proxies, timeout=timeout)
+        return article_response.status_code == 200
 
     except:
         return False
