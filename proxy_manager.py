@@ -1,39 +1,13 @@
 import requests
 import random
 import time
+from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ✅ قائمة الدول الأوروبية المسموح بها
 EUROPEAN_COUNTRIES = {
-    "fr",  # France
-    "de",  # Germany
-    "nl",  # Netherlands
-    "it",  # Italy
-    "es",  # Spain
-    "gb",  # United Kingdom
-    "pl",  # Poland
-    "se",  # Sweden
-    "fi",  # Finland
-    "no",  # Norway
-    "dk",  # Denmark
-    "be",  # Belgium
-    "at",  # Austria
-    "ch",  # Switzerland
-    "ie",  # Ireland
-    "cz",  # Czech Republic
-    "pt",  # Portugal
-    "sk",  # Slovakia
-    "gr",  # Greece
-    "hu",  # Hungary
-    "ro",  # Romania
-    "bg",  # Bulgaria
-    "hr",  # Croatia
-    "ee",  # Estonia
-    "lt",  # Lithuania
-    "lv",  # Latvia
-    "si",  # Slovenia
-    "cy",  # Cyprus
-    "lu",  # Luxembourg
+    "fr", "de", "nl", "it", "es", "gb", "pl", "se", "fi", "no", "dk", "be", "at", "ch",
+    "ie", "cz", "pt", "sk", "gr", "hu", "ro", "bg", "hr", "ee", "lt", "lv", "si", "cy", "lu"
 }
 
 # ⬇️ توليد رابط ديناميكي من الدول الأوروبية
@@ -46,11 +20,28 @@ PROXY_SOURCES = [
     "https://raw.githubusercontent.com/roosterkid/openproxylist/main/HTTPS_RAW.txt"
 ]
 
-# ✅ اختبار البروكسي
-def is_proxy_working(proxy, test_url="https://ammuse12345.blogspot.com", timeout=7):
+BLOG_URL = "https://ammuse12345.blogspot.com"
+
+# ✅ اختبار البروكسي مع التحقق من وجود مقالات فعلية
+def is_proxy_working(proxy, timeout=8):
+    proxies = {
+        "http": f"http://{proxy}",
+        "https": f"http://{proxy}",
+    }
     try:
-        response = requests.get(test_url, proxies={"http": proxy, "https": proxy}, timeout=timeout)
-        return response.status_code == 200
+        response = requests.get(BLOG_URL, proxies=proxies, timeout=timeout)
+        if response.status_code != 200:
+            return False
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+        links = soup.find_all('a')
+        for link in links:
+            href = link.get('href')
+            if href and href.startswith(BLOG_URL) and href.endswith(".html") and "/search" not in href:
+                return True  # ✅ بروكسي يعمل والمقالات متاحة
+
+        return False  # ❌ لا توجد مقالات صالحة رغم فتح الصفحة
+
     except:
         return False
 
