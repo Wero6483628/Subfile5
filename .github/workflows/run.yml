@@ -2,9 +2,9 @@ name: Run AI Agents
 
 on:
   schedule:
-    - cron: '0 */18 * * *'
-  workflow_dispatch:       # لتشغيله يدويًا من GitHub
-
+    - cron: '0 0 * * *'
+  workflow_dispatch:       # لتشغيله يدويًا من Git
+  
 jobs:
   run-script:
     runs-on: ubuntu-latest
