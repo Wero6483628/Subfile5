@@ -108,3 +108,13 @@ def get_required_proxies(required_count=50, max_attempts=10):
         print(f"⚠️ Only got {len(all_valid)} proxies after {max_attempts} attempts.")
 
     return list(all_valid)[:required_count]
+
+def quick_check(proxy, timeout=5):
+    try:
+        response = requests.get("https://ammuse12345.blogspot.com", proxies={
+            "http": f"http://{proxy}",
+            "https": f"http://{proxy}"
+        }, timeout=timeout)
+        return response.status_code == 200
+    except:
+        return False
