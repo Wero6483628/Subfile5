@@ -4,7 +4,6 @@ import threading
 from proxy_manager import get_required_proxies, is_proxy_working, quick_check
 from agent import Agent
 
-# ✅ دالة لتشغيل Agent مع مراقبة البروكسي كل 3 ثوانٍ بطريقة آمنة باستخدام threading.Event
 def run_agent_with_monitoring(agent_func, proxy):
     stop_event = threading.Event()
 
@@ -13,21 +12,19 @@ def run_agent_with_monitoring(agent_func, proxy):
             time.sleep(3)
             if not quick_check(proxy):
                 print(f"🔌 Proxy failed during agent run: {proxy}")
-                stop_event.set()  # نعلم أن البروكسي فشل
+                stop_event.set()
 
     monitor_thread = threading.Thread(target=monitor_proxy, daemon=True)
     monitor_thread.start()
 
     try:
-        while not stop_event.is_set():
-            agent_func(proxy)
-            # إذا كان agent_func عملية طويلة، يجب تعديلها لتتحقق من stop_event بشكل دوري
+        agent_func()  # ✅ تنفيذ واحد
         return not stop_event.is_set()
     except Exception as e:
         print(f"⚠️ Agent interrupted: {e}")
         return False
     finally:
-        stop_event.set()  # تأكد من إيقاف الـ Thread بعد الانتهاء
+        stop_event.set()
 
 # ----------------- بداية البرنامج --------------------
 
