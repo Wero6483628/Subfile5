@@ -1,8 +1,14 @@
 import random
 import time
 import requests
+from message_generator import generate_message
+from reddit_poster import RedditPoster
+from pinterest_poster import PinterestPoster
 from get_articles import get_articles
 from bs4 import BeautifulSoup
+
+reddit = RedditPoster()
+pinterest = PinterestPoster()
 
 class Agent:
     def __init__(self, proxy):
@@ -48,14 +54,14 @@ class Agent:
 
                 # Post to Reddit
                 print("📤 Posting to Reddit...")
-                post_to_reddit(message, article_url)
+                reddit.post("subreddit_name", message, article_url) 
 
                 # Short delay before Pinterest
                 time.sleep(random.randint(3, 6))
 
                 # Post to Pinterest
                 print("📌 Posting to Pinterest...")
-                post_to_pinterest(message, article_url)
+                pinterest.post(message, article_url)
 
                 # Wait between posts
                 time.sleep(random.randint(8, 15))
