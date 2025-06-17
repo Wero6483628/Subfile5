@@ -6,7 +6,13 @@ from reddit_poster import RedditPoster
 from pinterest_poster import PinterestPoster
 from get_articles import get_articles
 from bs4 import BeautifulSoup
-
+OPEN_SUBREDDITS = [
+    "test",
+    "selfpromotion",
+    "InternetIsBeautiful",
+    "ShareYourArticles",
+    "Blogging"
+]
 reddit = RedditPoster()
 pinterest = PinterestPoster()
 
@@ -54,8 +60,10 @@ class Agent:
 
                 # Post to Reddit
                 print("📤 Posting to Reddit...")
-                reddit.post("subreddit_name", message, article_url) 
-
+                subreddit = random.choice(OPEN_SUBREDDITS)
+success = reddit.post(subreddit, message, article_url)
+if not success:
+    print(f"⚠️ Failed to post to subreddit: {subreddit}")
                 # Short delay before Pinterest
                 time.sleep(random.randint(3, 6))
 
