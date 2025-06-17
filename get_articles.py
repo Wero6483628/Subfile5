@@ -23,7 +23,12 @@ def is_proxy_working(proxy):
         # نتحقق من وجود روابط مقالات
         for link in links:
             href = link.get('href')
-            if href and href.startswith(BLOG_URL) and href.endswith(".html") and "/search" not in href:
+            if (
+                href and
+                href.startswith(BLOG_URL) and
+                href.endswith(".html") and
+                "/search" not in href
+            ):
                 return True  # ✅ البروكسي يفتح المدونة ويوجد مقالات
         return False  # ❌ لا توجد مقالات رغم فتح الصفحة
     except:
@@ -38,7 +43,6 @@ def get_articles(proxy):
         "https": f"http://{proxy}",
     }
 
-
     try:
         response = requests.get(BLOG_URL, proxies=proxies, timeout=17)
         if response.status_code != 200:
@@ -50,9 +54,14 @@ def get_articles(proxy):
 
         articles = []
         for link in links:
-    href = link.get('href')
-    if href and href.startswith(BLOG_URL) and ".html" in href and "/search" not in href:
-        articles.append(href)
+            href = link.get('href')
+            if (
+                href and
+                href.startswith(BLOG_URL) and
+                ".html" in href and
+                "/search" not in href
+            ):
+                articles.append(href)
 
         # إزالة التكرار
         articles = list(set(articles))
