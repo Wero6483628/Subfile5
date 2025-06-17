@@ -24,11 +24,23 @@ class RedditPoster:
 
     def post(self, subreddit_name, title, url):
         try:
+            # تأخير عشوائي قبل النشر لتقليل احتمالية الحظر
             time.sleep(random.uniform(10, 30))
+
             subreddit = self.reddit.subreddit(subreddit_name)
-            subreddit.submit(title, url=url)
-            print(f"✅ Posted on Reddit: {title}")
+
+            try:
+                submission = subreddit.submit(title, url=url)
+            except Exception as e:
+                if "SUBREDDIT_NOTALLOWED" in str(e):
+                    print(f"🚫 Subreddit not allowed: {subreddit_name}")
+                    return False
+                # إعادة رفع الخطأ إذا لم يكن متعلقًا بعدم السماح بالنشر
+                raise
+
+            print(f"✅ Successfully posted on Reddit: {title}")
             return True
+
         except Exception as e:
-            print(f"❌ Reddit post failed: {e}")
-            return False
+            print(f"❌ Failed to post on Reddit: {e}")
+            return False 
