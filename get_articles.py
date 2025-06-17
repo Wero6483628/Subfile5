@@ -38,10 +38,6 @@ def get_articles(proxy):
         "https": f"http://{proxy}",
     }
 
-    # تحقق من البروكسي قبل استخدامه
-    ###if not is_proxy_working(proxy):
-       # print(f"❌ Proxy {proxy} failed test. Skipping.")
-        #return []###
 
     try:
         response = requests.get(BLOG_URL, proxies=proxies, timeout=10)
