@@ -5,7 +5,7 @@ import os
 
 class PinterestPoster:
     def __init__(self):
-        self.access_token = os.getenv("PINTEREST_ACCESS_TOKEN")
+        self.access_token = os.getenv("PINTEREST_ACESS_TOKEN")
         self.board_id = os.getenv("PINTEREST_BOARD_ID")
 
         if not all([self.access_token, self.board_id]):
