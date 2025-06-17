@@ -6,6 +6,7 @@ from reddit_poster import RedditPoster
 from pinterest_poster import PinterestPoster
 from get_articles import get_articles
 from bs4 import BeautifulSoup
+
 OPEN_SUBREDDITS = [
     "test",
     "selfpromotion",
@@ -13,6 +14,7 @@ OPEN_SUBREDDITS = [
     "ShareYourArticles",
     "Blogging"
 ]
+
 reddit = RedditPoster()
 pinterest = PinterestPoster()
 
@@ -28,7 +30,7 @@ class Agent:
         try:
             response = requests.get(url, proxies=self.proxy, timeout=10)
             soup = BeautifulSoup(response.text, 'html.parser')
-            
+
             # Scroll-like delay
             scroll_time = random.uniform(5, 12)
             print(f"🕒 Simulating read time: {int(scroll_time)}s")
@@ -63,7 +65,8 @@ class Agent:
                 subreddit = random.choice(OPEN_SUBREDDITS)
                 success = reddit.post(subreddit, message, article_url)
                 if not success:
-                print(f"⚠️ Failed to post to subreddit: {subreddit}")
+                    print(f"⚠️ Failed to post to subreddit: {subreddit}")
+
                 # Short delay before Pinterest
                 time.sleep(random.randint(3, 6))
 
