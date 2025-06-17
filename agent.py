@@ -8,11 +8,7 @@ from get_articles import get_articles
 from bs4 import BeautifulSoup
 
 OPEN_SUBREDDITS = [
-    "test",
-    "selfpromotion",
-    "InternetIsBeautiful",
-    "ShareYourArticles",
-    "Blogging"
+    "u/Ok-Coach-8130 " 
 ]
 
 reddit = RedditPoster()
