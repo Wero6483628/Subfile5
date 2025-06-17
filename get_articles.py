@@ -50,9 +50,9 @@ def get_articles(proxy):
 
         articles = []
         for link in links:
-            href = link.get('href')
-            if href and href.startswith(BLOG_URL) and href.endswith(".html") and "/search" not in href:
-                articles.append(href)
+    href = link.get('href')
+    if href and href.startswith(BLOG_URL) and ".html" in href and "/search" not in href:
+        articles.append(href)
 
         # إزالة التكرار
         articles = list(set(articles))
