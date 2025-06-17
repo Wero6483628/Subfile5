@@ -15,7 +15,7 @@ jobs:
       REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
       REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
 
-      PINTEREST_ACCESS_TOKEN: ${{ secrets.PINTEREST_ACCESS_TOKEN }}
+      PINTEREST_ACESS_TOKEN: ${{ secrets.PINTEREST_ACESS_TOKEN }}
       PINTEREST_BOARD_ID: ${{ secrets.PINTEREST_BOARD_ID }}
 
     steps:
