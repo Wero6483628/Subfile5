@@ -40,7 +40,7 @@ def get_articles(proxy):
 
 
     try:
-        response = requests.get(BLOG_URL, proxies=proxies, timeout=10)
+        response = requests.get(BLOG_URL, proxies=proxies, timeout=17)
         if response.status_code != 200:
             print(f"⚠️ Failed to fetch blog: Status {response.status_code}")
             return []
