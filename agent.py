@@ -36,7 +36,8 @@ class Agent:
 
         except Exception as e:
             print(f"❌ Failed to simulate behavior on {url}: {e}")
-
+            raise e
+            
     def run(self):
         proxy_str = self.proxy["http"].replace("http://", "")
         articles = get_articles(proxy_str)
