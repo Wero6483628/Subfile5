@@ -69,10 +69,10 @@ while len(final_proxies) < agent_count and attempt < max_quick_attempts:
         print("♻️ Retrying to complete proxy list...")
         time.sleep(1)
 
-# التأكد من وجود العدد الكافي من البروكسيات بعد الفحص السريع
+# ⚠️ إذا ما قدرنا نحصل كل البروكسيات المطلوبة، نكمل باللي موجود
 if len(final_proxies) < agent_count:
-    print(f"❌ Could only get {len(final_proxies)} working proxies after retries. Exiting.")
-    exit()
+    print(f"⚠️ Only found {len(final_proxies)} working proxies out of {agent_count} requested.")
+    agent_count = len(final_proxies)
 
 # ✅ إنشاء وتشغيل كل Agent مع مراقبة البروكسي واستبداله عند الفشل
 for i in range(agent_count):
