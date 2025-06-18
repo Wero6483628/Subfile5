@@ -37,15 +37,15 @@ def run_agent_with_auto_restart(agent_class, initial_proxy, remaining_proxies):
         if remaining_proxies:
             proxy = remaining_proxies.pop(0)
             print(f"🔁 Switching to new proxy: {proxy}")
+        else:
+            print("🔄 No remaining proxies. Fetching new proxy from proxy_manager...")
+            new_proxies = get_required_proxies(required_count=1)
+            if new_proxies:
+                proxy = new_proxies[0]
+                print(f"🆕 Using new proxy: {proxy}")
             else:
-    print("🔄 No remaining proxies. Fetching new proxy from proxy_manager...")
-    new_proxies = get_required_proxies(required_count=1)
-    if new_proxies:
-        proxy = new_proxies[0]
-        print(f"🆕 Using new proxy: {proxy}")
-    else:
-        print("❌ No new proxies found. Exiting.")
-        return False
+                print("❌ No new proxies found. Exiting.")
+                return False
 # ----------------- بداية البرنامج --------------------
 
 # ✅ تحديد عدد الـ Agents عشوائيًا بين 5 و 10 (حسب طلبك سابقًا)
