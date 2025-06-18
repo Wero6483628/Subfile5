@@ -10,8 +10,7 @@ OPEN_SUBREDDITS = [
     "u/Ok-Coach-8130 " 
 ]
 
-reddit = RedditPoster()
-pinterest = PinterestPoster()
+reddit = RedditPoster() 
 
 class Agent:
     def __init__(self, proxy):
