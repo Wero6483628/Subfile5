@@ -3,7 +3,6 @@ import time
 import requests
 from message_generator import generate_message
 from reddit_poster import RedditPoster
-from pinterest_poster import PinterestPoster
 from get_articles import get_articles
 from bs4 import BeautifulSoup
 
