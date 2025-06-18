@@ -24,11 +24,12 @@ def is_proxy_working(proxy):
         for link in links:
             href = link.get('href')
             if (
-                href and
-                href.startswith(BLOG_URL) and
-                href.endswith(".html") and
-                "/search" not in href
-            ):
+              href and
+              href.startswith(BLOG_URL) and
+              ".html" in href and
+              "/search" not in href and
+              "#comments" not in href
+               ):
                 return True  # ✅ البروكسي يفتح المدونة ويوجد مقالات
         return False  # ❌ لا توجد مقالات رغم فتح الصفحة
     except:
