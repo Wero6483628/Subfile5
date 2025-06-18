@@ -4,28 +4,42 @@ import threading
 from proxy_manager import get_required_proxies, is_proxy_working, quick_check
 from agent import Agent
 
-def run_agent_with_monitoring(agent_func, proxy):
-    stop_event = threading.Event()
+def run_agent_with_auto_restart(agent_class, initial_proxy, remaining_proxies):
+    proxy = initial_proxy
 
-    def monitor_proxy():
-        while not stop_event.is_set():
-            time.sleep(3)
-            if not quick_check(proxy):
-                print(f"🔌 Proxy failed during agent run: {proxy}")
-                stop_event.set()
+    while True:
+        stop_event = threading.Event()
 
-    monitor_thread = threading.Thread(target=monitor_proxy, daemon=True)
-    monitor_thread.start()
+        def monitor_proxy():
+            while not stop_event.is_set():
+                time.sleep(3)
+                if not quick_check(proxy):
+                    print(f"🔌 Proxy failed during agent run: {proxy}")
+                    stop_event.set()
 
-    try:
-        agent_func()  # ✅ تنفيذ واحد
-        return not stop_event.is_set()
-    except Exception as e:
-        print(f"⚠️ Agent interrupted: {e}")
-        return False
-    finally:
+        monitor_thread = threading.Thread(target=monitor_proxy, daemon=True)
+        monitor_thread.start()
+
+        agent = agent_class(proxy)
+
+        try:
+            agent.run()
+            if not stop_event.is_set():
+                return True  # ✅ Agent خلص بنجاح
+            else:
+                print("⚠️ Proxy failed mid-run. Restarting with new proxy...")
+        except Exception as e:
+            print(f"❌ Agent crashed: {e}")
+
         stop_event.set()
+        time.sleep(15)
 
+        if remaining_proxies:
+            proxy = remaining_proxies.pop(0)
+            print(f"🔁 Switching to new proxy: {proxy}")
+        else:
+            print("❌ No more proxies to retry. Exiting.")
+            return False
 # ----------------- بداية البرنامج --------------------
 
 # ✅ تحديد عدد الـ Agents عشوائيًا بين 5 و 10 (حسب طلبك سابقًا)
@@ -60,14 +74,14 @@ if len(final_proxies) < agent_count:
     print(f"❌ Could only get {len(final_proxies)} working proxies after retries. Exiting.")
     exit()
 
-# ✅ إنشاء وتشغيل كل Agent مع مراقبة البروكسي كل 3 ثوانٍ
+# ✅ إنشاء وتشغيل كل Agent مع مراقبة البروكسي واستبداله عند الفشل
 for i in range(agent_count):
     proxy = final_proxies[i]
+    remaining = final_proxies[i+1:]  # البروكسيات المتبقية بعد هذا الـ Agent
     print(f"\n🚀 Starting Agent #{i+1} with proxy: {proxy}")
 
     try:
-        agent = Agent(proxy)
-        run_agent_with_monitoring(agent.run, proxy)
+        run_agent_with_auto_restart(Agent, proxy, remaining)
     except Exception as e:
         print(f"❌ Error in Agent #{i+1}: {e}")
 
