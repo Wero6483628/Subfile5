@@ -12,7 +12,7 @@ def run_agent_with_auto_restart(agent_class, initial_proxy, remaining_proxies):
 
         def monitor_proxy():
             while not stop_event.is_set():
-                time.sleep(3)
+                time.sleep(1)
                 if not quick_check(proxy):
                     print(f"🔌 Proxy failed during agent run: {proxy}")
                     stop_event.set()
