@@ -56,11 +56,10 @@ class Agent:
                 print(f"📝 Message: {message}")
 
                 # Post to Reddit
-                print("📤 Posting to Reddit...")
-                subreddit = random.choice(OPEN_SUBREDDITS)
-                success = reddit.post(subreddit, message, article_url)
+                print("📤 Posting to Reddit...") 
+                success = reddit.post(message, article_url)
                 if not success:
-                    print(f"⚠️ Failed to post to subreddit: {subreddit}")
+                    print(f"⚠️ Failed to post to Reddit profile.")
 
                 # Short delay before Pinterest
                 time.sleep(random.randint(3, 6))
