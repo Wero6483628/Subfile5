@@ -2,15 +2,11 @@ import random
 import time
 import requests
 from message_generator import generate_message
-from reddit_poster import RedditPoster
+from mastodon_poster import MastodonPoster
 from get_articles import get_articles
 from bs4 import BeautifulSoup
 
-OPEN_SUBREDDITS = [
-    "u/Ok-Coach-8130 " 
-]
-
-reddit = RedditPoster() 
+mastodon = MastodonPoster()
 
 class Agent:
     def __init__(self, proxy):
