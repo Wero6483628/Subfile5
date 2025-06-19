@@ -34,38 +34,30 @@ class Agent:
             print(f"❌ Failed to simulate behavior on {url}: {e}")
             raise e
             
-    def run(self):
-        proxy_str = self.proxy["http"].replace("http://", "")
-        articles = get_articles(proxy_str)
-        if not articles:
-            print("⚠️ No articles found.")
-            return
+       def run(self):
+    proxy_str = self.proxy["http"].replace("http://", "")
+    articles = get_articles(proxy_str)
+    if not articles:
+        print("⚠️ No articles found.")
+        return
 
-        selected_articles = random.sample(articles, min(len(articles), random.randint(3, 5)))
+    selected_articles = random.sample(articles, min(len(articles), random.randint(3, 5)))
 
-        for article_url in selected_articles:
-            try:
-                self.simulate_human_behavior(article_url)
+    for article_url in selected_articles:
+        try:
+            self.simulate_human_behavior(article_url)
 
-                # Generate unique message
-                message = generate_message(article_url)
-                print(f"📝 Message: {message}")
+            message = generate_message(article_url)
+            print(f"📝 Message: {message}")
 
-                # Post to Reddit
-                print("📤 Posting to Reddit...") 
-                success = reddit.post(message, article_url)
-                if not success:
-                    print(f"⚠️ Failed to post to Reddit profile.")
+            # Post to Mastodon
+            print("🐘 Posting to Mastodon...")
+            success = mastodon.post(message, article_url)
+            if not success:
+                print("⚠️ Failed to post to Mastodon.")
 
-                # Short delay before Pinterest
-                time.sleep(random.randint(3, 6))
+            # Wait between posts
+            time.sleep(random.randint(8, 15))
 
-                # Post to Pinterest
-                print("📌 Posting to Pinterest...")
-                pinterest.post(message, article_url)
-
-                # Wait between posts
-                time.sleep(random.randint(8, 15))
-
-            except Exception as e:
-                print(f"❌ Error handling article {article_url}: {e}")
+        except Exception as e:
+            print(f"❌ Error handling article {article_url}: {e}")
