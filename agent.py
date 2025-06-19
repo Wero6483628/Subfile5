@@ -21,43 +21,39 @@ class Agent:
             response = requests.get(url, proxies=self.proxy, timeout=10)
             soup = BeautifulSoup(response.text, 'html.parser')
 
-            # Scroll-like delay
             scroll_time = random.uniform(5, 12)
             print(f"🕒 Simulating read time: {int(scroll_time)}s")
             time.sleep(scroll_time)
 
-            # Randomly interact with text or images (simulate)
             print("🧠 Simulating user interaction...")
             time.sleep(random.uniform(1, 3))
 
         except Exception as e:
             print(f"❌ Failed to simulate behavior on {url}: {e}")
             raise e
-            
-       def run(self):
-    proxy_str = self.proxy["http"].replace("http://", "")
-    articles = get_articles(proxy_str)
-    if not articles:
-        print("⚠️ No articles found.")
-        return
 
-    selected_articles = random.sample(articles, min(len(articles), random.randint(3, 5)))
+    def run(self):
+        proxy_str = self.proxy["http"].replace("http://", "")
+        articles = get_articles(proxy_str)
+        if not articles:
+            print("⚠️ No articles found.")
+            return
 
-    for article_url in selected_articles:
-        try:
-            self.simulate_human_behavior(article_url)
+        selected_articles = random.sample(articles, min(len(articles), random.randint(3, 5)))
 
-            message = generate_message(article_url)
-            print(f"📝 Message: {message}")
+        for article_url in selected_articles:
+            try:
+                self.simulate_human_behavior(article_url)
 
-            # Post to Mastodon
-            print("🐘 Posting to Mastodon...")
-            success = mastodon.post(message, article_url)
-            if not success:
-                print("⚠️ Failed to post to Mastodon.")
+                message = generate_message(article_url)
+                print(f"📝 Message: {message}")
 
-            # Wait between posts
-            time.sleep(random.randint(8, 15))
+                print("🐘 Posting to Mastodon...")
+                success = mastodon.post(message, article_url)
+                if not success:
+                    print("⚠️ Failed to post to Mastodon.")
 
-        except Exception as e:
-            print(f"❌ Error handling article {article_url}: {e}")
+                time.sleep(random.randint(8, 15))
+
+            except Exception as e:
+                print(f"❌ Error handling article {article_url}: {e}")
