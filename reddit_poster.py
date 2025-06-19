@@ -22,25 +22,24 @@ class RedditPoster:
             user_agent=self.user_agent
         )
 
-    def post(self, subreddit_name, title, url):
+    def post(self, title, url):
         try:
-            # تأخير عشوائي قبل النشر لتقليل احتمالية الحظر
+            # تأخير عشوائي لتقليل احتمالية الحظر
             time.sleep(random.uniform(10, 30))
 
-            subreddit = self.reddit.subreddit(subreddit_name)
+            subreddit = self.reddit.subreddit(f"u_{self.username}")
 
             try:
                 submission = subreddit.submit(title, url=url)
             except Exception as e:
                 if "SUBREDDIT_NOTALLOWED" in str(e):
-                    print(f"🚫 Subreddit not allowed: {subreddit_name}")
+                    print(f"🚫 Subreddit not allowed: u_{self.username}")
                     return False
-                # إعادة رفع الخطأ إذا لم يكن متعلقًا بعدم السماح بالنشر
                 raise
 
-            print(f"✅ Successfully posted on Reddit: {title}")
+            print(f"✅ Successfully posted on Reddit profile: {title}")
             return True
 
         except Exception as e:
-            print(f"❌ Failed to post on Reddit: {e}")
-            return False 
+            print(f"❌ Failed to post on Reddit profile: {e}")
+            return False
