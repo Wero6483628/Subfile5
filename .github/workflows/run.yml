@@ -1,19 +1,19 @@
-name: Run AI Agents 
+name: Run Ai agnets
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:       # لتشغيله يدويًا من Git
-  
+    - cron: "0 7 * * *"  # تشغيل يوميًا الساعة 7 صباحًا بتوقيت UTC
+  workflow_dispatch:     # تشغيل يدوي عند الحاجة
+
 jobs:
-  run-script:
+  post:
     runs-on: ubuntu-latest
-     env:
-  MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
-  MASTODON_API_BASE_URL: ${{ secrets.MASTODON_API_BASE_URL }}
+    env:
+      MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
+      MASTODON_API_BASE_URL: ${{ secrets.MASTODON_API_BASE_URL }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -26,5 +26,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run main script
+      - name: Run agnet
         run: python main.py
